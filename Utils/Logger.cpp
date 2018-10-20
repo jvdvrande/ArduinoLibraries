@@ -22,6 +22,12 @@ void Logger::log(float number, const char* unit)
     m_lcd.print(unit);
 }
 
+void Logger::log(uint8_t col, uint8_t row, const String& text)
+{
+    m_lcd.setCursor(col, row);
+    m_lcd.print(text);
+}
+
 void Logger::log(uint8_t col, uint8_t row, const char* text)
 {
     m_lcd.setCursor(col, row);

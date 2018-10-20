@@ -21,10 +21,12 @@ public:
     
 public:
     void log(const String& text)                {m_lcd.print(text);}
+    
     void log(const char* text)                  {m_lcd.print(text);}
     void log(float number)                      {m_lcd.print(number);}
     void log(float number, const char* unit);
 
+    void log(uint8_t col, uint8_t row, const String& text);
     void log(uint8_t col, uint8_t row, const char* text);
 
 private:
