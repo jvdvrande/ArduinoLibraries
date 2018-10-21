@@ -1,5 +1,7 @@
 #include "MotorDriver.h"
 
+#include "Logger.h"
+
 MotorDriver::MotorDriver(uint8_t rpwm, uint8_t rfwd, uint8_t rbwd, uint8_t lpwm, uint8_t lfwd, uint8_t lbwd)
 {
     m_left_pwm_pin = lpwm;
@@ -56,25 +58,33 @@ void MotorDriver::turn_left(uint8_t pwm)
 
 void MotorDriver::test_drives(uint8_t pwm, int drive_delay, int pause_delay)
 {
+    Logger::instance().log(0, 0, "Testing Drives  ");
+    
+    Logger::instance().log(0, 1, "Left  Fwd " + String(pwm) + "pwm");
     drive_left(true, pwm);
     delay(drive_delay);
     stop();
     delay(pause_delay);
 
+    Logger::instance().log(0, 1, "Right Fwd " + String(pwm) + "pwm");
     drive_right(true, pwm);
     delay(drive_delay);
     stop();
     delay(pause_delay);
     
+    Logger::instance().log(0, 1, "Left  Bwd " + String(pwm) + "pwm");
     drive_left(false, pwm);
     delay(drive_delay);
     stop();
     delay(pause_delay);
     
+    Logger::instance().log(0, 1, "Right Bwd " + String(pwm) + "pwm");
     drive_right(false, pwm);
     delay(drive_delay);
     stop();
     delay(pause_delay);
+
+    Logger::instance().clear();
 }
 
 // ----------------------------------------------
