@@ -1,14 +1,48 @@
 #include "SonarHead.h"
 
+#include "Logger.h"
+
 SonarHead::SonarHead(uint8_t trigger_pin, uint8_t echo_pin, uint8_t servo_pin)
     : m_sonar(trigger_pin, echo_pin)
+    , m_servo_pin(servo_pin)
     , m_scans(1)
 {
-    m_head.attach(servo_pin);
-
     init_scans(1, 0, 0);
 }
 
+void SonarHead::init()
+{
+    // init servo
+    m_head.write(90); // look forward
+    m_head.attach(m_servo_pin);
+
+    // init sonar
+    m_sonar.init();
+}
+
+void SonarHead::test_servo(int delay_ms)
+{
+    Logger::instance().log(0, 0, "Testing Servo   ");
+    
+    Logger::instance().log(0, 1, "Right           ");
+    m_head.write(0);
+    delay(delay_ms);
+    
+    Logger::instance().log(0, 1, "Forward         ");
+    m_head.write(90);
+    delay(delay_ms);
+    
+    Logger::instance().log(0, 1, "Left            ");
+    m_head.write(180);
+    delay(delay_ms);
+
+    Logger::instance().log(0, 1, "Reset           ");
+    m_head.write(90);
+
+    Logger::instance().clear();
+}
+
+// ----------------------------------------------
 void SonarHead::look_at(int8_t direction, bool wait)
 {
     // move servo ([Right .. Left] = [-90 .. 90] -> [0 .. 180])

@@ -29,6 +29,11 @@ public:
 public:
 	SonarHead(uint8_t trigger_pin, uint8_t echo_pin, uint8_t servo_pin);
 
+    void init();
+
+    void test_servo(int delay_ms);
+
+public:
     void look_at(int8_t direction, bool wait);
     
     float current_distance()                const   {return m_sonar.distance();}
@@ -41,6 +46,8 @@ public:
 
     uint8_t scan_count()                        const   {return m_scans.size();}
     uint8_t scan_range()                        const   {return (int)m_scan_max_angle - m_scan_min_angle;}
+    
+    float scanned_index(uint8_t index)          const   {return m_scans[index];}
     float scanned_distance(int8_t direction)    const   {return m_scans[to_scan_index(direction)];}
 
     uint8_t to_scan_index(int8_t direction)     const;
@@ -52,6 +59,7 @@ private:
 private:
     HC_SR04 m_sonar;
     Servo m_head;
+    uint8_t m_servo_pin;
 
     // scan results
     FloatArray m_scans;
