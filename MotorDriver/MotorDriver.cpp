@@ -13,10 +13,21 @@ MotorDriver::MotorDriver(uint8_t rpwm, uint8_t rfwd, uint8_t rbwd, uint8_t lpwm,
     
     m_drive_pwm = 200;
     m_turn_pwm  = 100;
-
-    init();
 }
 
+void MotorDriver::init()
+{
+    // setup pins
+    pinMode(m_left_pwm_pin, OUTPUT);
+    pinMode(m_left_fwd_pin, OUTPUT);
+    pinMode(m_left_bwd_pin, OUTPUT);
+    
+    pinMode(m_right_pwm_pin, OUTPUT);
+    pinMode(m_right_fwd_pin, OUTPUT);
+    pinMode(m_right_bwd_pin, OUTPUT);
+}
+
+// ----------------------------------------------
 void MotorDriver::forward(uint8_t pwm)
 {
     drive_right(true, pwm);
@@ -27,6 +38,13 @@ void MotorDriver::backward(uint8_t pwm)
 {
     drive_right(false, pwm);
     drive_left (false, pwm);
+}
+
+void MotorDriver::backward_for(uint16_t delay_ms)
+{
+    backward();
+    delay(delay_ms);
+    stop();
 }
 
 void MotorDriver::stop()
@@ -88,18 +106,6 @@ void MotorDriver::test_drives(uint8_t pwm, int drive_delay, int pause_delay)
 }
 
 // ----------------------------------------------
-void MotorDriver::init()
-{
-    // setup pins
-    pinMode(m_left_pwm_pin, OUTPUT);
-    pinMode(m_left_fwd_pin, OUTPUT);
-    pinMode(m_left_bwd_pin, OUTPUT);
-    
-    pinMode(m_right_pwm_pin, OUTPUT);
-    pinMode(m_right_fwd_pin, OUTPUT);
-    pinMode(m_right_bwd_pin, OUTPUT);
-}
-
 void MotorDriver::drive_right(bool fwd, uint8_t pwm)
 {
     digitalWrite(m_right_fwd_pin, fwd ? HIGH : LOW);
