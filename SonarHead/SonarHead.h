@@ -31,22 +31,26 @@ public:
 
     void init();
 
-    void test_servo(int delay_ms);
+    void test_servo(uint16_t delay_ms);
+    void log_distances(uint16_t delay_ms);
 
 public:
-    void look_at(int8_t direction, bool wait);
+    void set_scan_delay(uint16_t delay_ms)          {m_scan_delay = delay_ms;}
+
+public:
+    void look_at(int8_t direction, bool wait = false);
     
     float current_distance()                const   {return m_sonar.distance();}
     int current_direction()                         {return m_head.read() + SERVO_MIN;}
 
-    float scan_direction(int8_t direction, int scan_delay = 0);
+    float scan_direction(int8_t direction);
 
     // do number of scans in defined range 
     void sweep(int8_t min, int8_t max, uint8_t sample_count);
 
     uint8_t scan_count()                        const   {return m_scans.size();}
     uint8_t scan_range()                        const   {return (int)m_scan_max_angle - m_scan_min_angle;}
-    
+
     float scanned_index(uint8_t index)          const   {return m_scans[index];}
     float scanned_distance(int8_t direction)    const   {return m_scans[to_scan_index(direction)];}
 
@@ -60,6 +64,8 @@ private:
     HC_SR04 m_sonar;
     Servo m_head;
     uint8_t m_servo_pin;
+
+    uint16_t m_scan_delay;
 
     // scan results
     FloatArray m_scans;
